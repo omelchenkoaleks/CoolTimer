@@ -9,7 +9,7 @@
 
 
     <SeekBar
-        android:id="@+id/seekBar2"
+        android:id="@+id/seek_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -30,11 +30,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar2"
+        app:layout_constraintTop_toBottomOf="@+id/seek_bar"
         app:srcCompat="@drawable/bell" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/_00_60"
@@ -45,7 +45,7 @@
         android:textSize="50sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/image_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,6 +62,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/text_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
