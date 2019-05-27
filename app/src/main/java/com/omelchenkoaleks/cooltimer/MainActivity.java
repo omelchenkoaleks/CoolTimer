@@ -1,8 +1,12 @@
 package com.omelchenkoaleks.cooltimer;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -107,5 +111,27 @@ public class MainActivity extends AppCompatActivity {
         mSeekBar.setEnabled(true);
         mSeekBar.setProgress(30);
         isTimerOn = false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.timer_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent openSettings = new Intent(this, SettingsActivity.class);
+            startActivity(openSettings);
+            return true;
+        } else if (id == R.id.action_about) {
+            Intent aboutIntent = new Intent(this, AboutActivity.class);
+            startActivity(aboutIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
