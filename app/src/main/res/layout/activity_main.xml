@@ -37,7 +37,7 @@
         android:id="@+id/text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/_00_60"
+        android:text="@string/_00_30"
         android:textColor="@android:color/black"
         android:layout_marginStart="8dp"
         android:layout_marginTop="255dp"

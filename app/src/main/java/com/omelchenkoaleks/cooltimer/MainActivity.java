@@ -1,20 +1,21 @@
 package com.omelchenkoaleks.cooltimer;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import java.util.concurrent.RunnableFuture;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     SeekBar mSeekBar;
     TextView mTextView;
+    boolean isTimerOn;
+    Button mButton;
+    CountDownTimer mCountDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,9 +24,11 @@ public class MainActivity extends AppCompatActivity {
 
         mSeekBar = findViewById(R.id.seek_bar);
         mTextView = findViewById(R.id.text_view);
+        mButton = findViewById(R.id.button);
 
         mSeekBar.setMax(600);
-        mSeekBar.setProgress(60);
+        mSeekBar.setProgress(30);
+        isTimerOn = false;
 
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -48,17 +51,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void start(View view) {
-        new CountDownTimer(mSeekBar.getProgress() * 1000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                updateTimer(millisUntilFinished);
-            }
+        if (!isTimerOn) {
+            mButton.setText(R.string.stop);
+            mSeekBar.setEnabled(false);
+            isTimerOn = true;
 
-            @Override
-            public void onFinish() {
-                Log.d("onFinish: ", "Finish");
-            }
-        }.start();
+            mCountDownTimer = new CountDownTimer(
+                    mSeekBar.getProgress() * 1000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    updateTimer(millisUntilFinished);
+                }
+
+                @Override
+                public void onFinish() {
+                    MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(),
+                            R.raw.bell_sound);
+                    mediaPlayer.start();
+                    resetTimer();
+                }
+            };
+            mCountDownTimer.start();
+
+        } else {
+            resetTimer();
+        }
     }
 
     private void updateTimer(long millisUntilFinished) {
@@ -81,5 +98,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mTextView.setText(minutesString + ":" + secondsString);
+    }
+
+    private void resetTimer() {
+        mCountDownTimer.cancel();
+        mTextView.setText(R.string._00_30);
+        mButton.setText(R.string.start);
+        mSeekBar.setEnabled(true);
+        mSeekBar.setProgress(30);
+        isTimerOn = false;
     }
 }
