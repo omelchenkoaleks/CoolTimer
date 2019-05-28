@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     boolean isTimerOn;
     Button mButton;
     CountDownTimer mCountDownTimer;
+    int defaultInterval;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         mButton = findViewById(R.id.button);
 
         mSeekBar.setMax(600);
-        mSeekBar.setProgress(30);
+        setIntervalFromSharedPreference(PreferenceManager.getDefaultSharedPreferences(this));
         isTimerOn = false;
 
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -122,11 +123,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void resetTimer() {
         mCountDownTimer.cancel();
-        mTextView.setText(R.string._00_30);
         mButton.setText(R.string.start);
         mSeekBar.setEnabled(true);
-        mSeekBar.setProgress(30);
         isTimerOn = false;
+        setIntervalFromSharedPreference(PreferenceManager.getDefaultSharedPreferences(this));
     }
 
     @Override
@@ -152,5 +152,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setIntervalFromSharedPreference(SharedPreferences sharedPreference) {
+        defaultInterval = Integer.valueOf(sharedPreference.getString("default interval", "30"));
+        mTextView.setText("00:" + defaultInterval);
+        mSeekBar.setProgress(defaultInterval);
     }
 }
