@@ -1,6 +1,7 @@
 package com.omelchenkoaleks.cooltimer;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -13,6 +14,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 public class MainActivity extends AppCompatActivity {
     SeekBar mSeekBar;
@@ -69,9 +71,13 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onFinish() {
-                    MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(),
-                            R.raw.bell_sound);
-                    mediaPlayer.start();
+                    SharedPreferences sharedPreferences =
+                            PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    if (sharedPreferences.getBoolean("enable_sound", true)) {
+                        MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(),
+                                R.raw.bell_sound);
+                        mediaPlayer.start();
+                    }
                     resetTimer();
                 }
             };
