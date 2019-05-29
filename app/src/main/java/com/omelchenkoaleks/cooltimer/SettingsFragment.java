@@ -2,6 +2,7 @@ package com.omelchenkoaleks.cooltimer;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.preference.CheckBoxPreference;
@@ -12,23 +13,25 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
 
 public class SettingsFragment extends PreferenceFragmentCompat
-        implements SharedPreferences.OnSharedPreferenceChangeListener {
+        implements SharedPreferences.OnSharedPreferenceChangeListener,
+        Preference.OnPreferenceChangeListener {
+
+     /*
+        OnSharedPreferenceChangeListener следит за файлом SharedPreferences - когда
+        в этот файл помещается какое-то значение, то включается его метод
+
+        OnPreferenceChangeListener следит за тем, когда какая-то конкретная настройка изменена
+        и включается она до того, как значение помещено в SharedPreferences файл - если
+        его метод возвращает значение false, то изменение не будет помещено в файл SharedPreferences
+     */
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.timer_preferences);
-
-        /*
-            весь этот код нужен для отображения в выборе настроек надписи, какая именно
-            мелодия включена на данный момент (под Timer Melody)
-         */
         SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
         PreferenceScreen preferenceScreen = getPreferenceScreen();
 
-        // чтобы получить количество настроек, которые находятся
-        // на PreferenceScreen (timer_preference)
         int count = preferenceScreen.getPreferenceCount();
-
-        // теперь нужно получить конкретную настройку - получаем ее при помощи итерации:
         for (int i = 0; i < count; i++) {
             Preference preference = preferenceScreen.getPreference(i);
 
@@ -37,6 +40,9 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 setPreferenceLabel(preference, value);
             }
         }
+
+        Preference preference = findPreference("default interval");
+        preference.setOnPreferenceChangeListener(this);
     }
 
     //
@@ -64,14 +70,31 @@ public class SettingsFragment extends PreferenceFragmentCompat
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // нужно зарегистрировать слушателя
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // нужно удалить из регистрации
         getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        Toast toast = Toast.makeText(
+                getContext(), "Please enter an integer number", Toast.LENGTH_SHORT);
+
+        if (preference.getKey().equals("default interval")) {
+            String defaultIntervalString = (String) newValue;
+
+            try {
+                int defaultInterval = Integer.parseInt(defaultIntervalString);
+            } catch (Exception e) {
+                toast.show();
+                return false;
+            }
+        }
+
+        return true;
     }
 }
